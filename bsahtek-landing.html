@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bsahtek — تطبيق الوعي الغذائي الجزائري</title>
+  <meta name="description"
+    content="Bsahtek: امسح باركود أي منتج غذائي واحصل على تقييم فوري وواضح لجودته. تطبيق جزائري 100% لمساعدة كل مستهلك يقرر بوعي.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Lalezar&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Baloo+2:wght@600;800&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --cream: #FBF3DC;
+      --paper: #FFFDF6;
+      --ink: #211F14;
+      --ink-soft: #6B6650;
+      --gold: #F0B429;
+      --gold-deep: #D89A1B;
+      --leaf: #2F8F46;
+      --leaf-soft: #E1F0E2;
+      --amber: #E8802E;
+      --red: #E14B3B;
+      --line: rgba(33, 31, 20, 0.12);
+      --shadow: 0 20px 50px -20px rgba(33, 31, 20, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: 'Lalezar', 'IBM Plex Sans Arabic', sans-serif;
+      font-weight: 400;
+      margin: 0;
+      line-height: 1.25;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .wrap {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--gold-deep);
+      background: rgba(240, 180, 41, 0.14);
+      border: 1px solid rgba(240, 180, 41, 0.35);
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow::before {
+      content: "●";
+      font-size: 8px;
+      color: var(--leaf);
+    }
+
+    /* ---------- NAV ---------- */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(251, 243, 220, 0.88);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav-inner {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 800;
+      font-size: 22px;
+      letter-spacing: 0.5px;
+      direction: ltr;
+      display: inline-flex;
+      align-items: baseline;
+    }
+
+    .brand b {
+      color: var(--leaf);
+    }
+
+    .brand i {
+      font-style: normal;
+      color: var(--ink);
+    }
+
+    .brand em {
+      font-style: normal;
+      color: var(--amber);
+    }
+
+    .nav-cta {
+      background: var(--ink);
+      color: var(--paper);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 10px 22px;
+      border-radius: 100px;
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .nav-cta:hover {
+      background: var(--leaf);
+      transform: translateY(-2px);
+    }
+
+    /* ---------- HERO ---------- */
+    .hero {
+      padding: 64px 0 40px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero-grid {
+      display: flex;
+      align-items: center;
+      gap: 56px;
+    }
+
+    .hero-text {
+      flex: 1 1 480px;
+      min-width: 280px;
+    }
+
+    .hero-visual {
+      flex: 1 1 380px;
+      min-width: 260px;
+      display: flex;
+      justify-content: center;
+      position: relative;
+    }
+
+    .hero h1 {
+      font-size: 56px;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 span {
+      color: var(--leaf);
+      display: block;
+    }
+
+    .hero-sub {
+      font-size: 18px;
+      color: var(--ink-soft);
+      max-width: 520px;
+      margin-bottom: 32px;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 36px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px 28px;
+      border-radius: 100px;
+      font-weight: 700;
+      font-size: 16px;
+      text-decoration: none;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--ink);
+      box-shadow: var(--shadow);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+    }
+
+    .btn-ghost {
+      border-color: var(--ink);
+      color: var(--ink);
+      background: transparent;
+    }
+
+    .btn-ghost:hover {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .trust-strip {
+      display: flex;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink-soft);
+    }
+
+    .trust-item .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--leaf);
+      flex: none;
+    }
+
+    .phone-frame {
+      width: 270px;
+      border-radius: 38px;
+      background: var(--ink);
+      padding: 10px;
+      box-shadow: var(--shadow);
+      position: relative;
+      transform: rotate(-3deg);
+    }
+
+    .phone-frame img {
+      border-radius: 28px;
+      width: 100%;
+      display: block;
+    }
+
+    .badge {
+      white-space: nowrap;
+      line-height: 1;
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 800;
+      color: #fff;
+      border-radius: 50%;
+      box-shadow: 0 10px 24px -8px rgba(0, 0, 0, 0.35);
+      animation: float 5s ease-in-out infinite;
+    }
+
+    .badge-a {
+      width: 92px;
+      height: 92px;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+      background: var(--leaf);
+      top: 4%;
+      right: -10%;
+      animation-delay: 0s;
+    }
+
+    .badge-c {
+      width: 48px;
+      height: 48px;
+      font-size: 20px;
+      background: var(--gold);
+      bottom: 20%;
+      left: -8%;
+      animation-delay: .8s;
+    }
+
+    .badge-e {
+      width: 44px;
+      height: 44px;
+      font-size: 18px;
+      background: var(--red);
+      bottom: -2%;
+      right: 14%;
+      animation-delay: 1.6s;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0px);
+      }
+
+      50% {
+        transform: translateY(-14px);
+      }
+    }
+
+    /* ---------- PROBLEM ---------- */
+    .problem {
+      background: var(--ink);
+      color: var(--cream);
+      padding: 80px 0;
+    }
+
+    .problem .wrap {
+      max-width: 840px;
+      text-align: center;
+    }
+
+    .problem .eyebrow {
+      background: rgba(251, 243, 220, 0.12);
+      border-color: rgba(251, 243, 220, 0.25);
+      color: var(--gold);
+    }
+
+    .problem .eyebrow::before {
+      color: var(--gold);
+    }
+
+    .problem h2 {
+      font-size: 38px;
+      color: var(--paper);
+      margin-bottom: 22px;
+    }
+
+    .problem p {
+      font-size: 17px;
+      color: rgba(251, 243, 220, 0.75);
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    /* ---------- SECTION GENERIC ---------- */
+    section {
+      padding: 90px 0;
+    }
+
+    .section-head {
+      max-width: 640px;
+      margin-bottom: 56px;
+    }
+
+    .section-head h2 {
+      font-size: 38px;
+      margin-bottom: 16px;
+    }
+
+    .section-head p {
+      color: var(--ink-soft);
+      font-size: 17px;
+    }
+
+    /* ---------- STEPS ---------- */
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 48px;
+      padding: 44px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .step:last-child {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .step:nth-child(even) {
+      flex-direction: row-reverse;
+    }
+
+    .step-num {
+      flex: none;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: var(--paper);
+      border: 2px solid var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Lalezar', sans-serif;
+      font-size: 26px;
+    }
+
+    .step-body {
+      flex: 1 1 320px;
+    }
+
+    .step-body h3 {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      font-weight: 700;
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .step-body p {
+      color: var(--ink-soft);
+      font-size: 16px;
+    }
+
+    .step-visual {
+      flex: none;
+    }
+
+    .step-visual .phone-frame {
+      width: 190px;
+      transform: rotate(0deg);
+      margin: 0;
+    }
+
+    /* ---------- VIDEO CARD ---------- */
+    .video-card {
+      position: relative;
+      border-radius: 24px;
+      overflow: hidden;
+      aspect-ratio: 16/9;
+      background-size: cover;
+      background-position: center;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+    }
+
+    .video-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(33, 31, 20, 0.15) 0%, rgba(33, 31, 20, 0.55) 100%);
+    }
+
+    .video-card .play-wrap {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      z-index: 2;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .play-btn {
+      width: 78px;
+      height: 78px;
+      border-radius: 50%;
+      background: var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 14px 30px -8px rgba(0, 0, 0, 0.45);
+      transition: transform .25s ease;
+    }
+
+    .video-card:hover .play-btn {
+      transform: scale(1.08);
+    }
+
+    .play-btn svg {
+      margin-right: -4px;
+    }
+
+    .video-caption {
+      color: #fff;
+      font-weight: 700;
+      font-size: 17px;
+    }
+
+    .video-caption small {
+      display: block;
+      font-weight: 400;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.75);
+      margin-top: 6px;
+    }
+
+    /* ---------- DATABASE ---------- */
+    .db-grid {
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .db-copy {
+      flex: 1 1 340px;
+      min-width: 280px;
+    }
+
+    .db-copy .feature-list {
+      margin-top: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .feature-list li {
+      list-style: none;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .feature-list .ico {
+      flex: none;
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--leaf-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--leaf);
+      font-weight: 800;
+    }
+
+    .feature-list b {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 2px;
+    }
+
+    .feature-list span {
+      color: var(--ink-soft);
+      font-size: 14px;
+    }
+
+    .db-shots {
+      flex: 1 1 380px;
+      min-width: 280px;
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .db-shots .phone-frame {
+      width: 200px;
+      transform: rotate(0deg);
+      margin: 0;
+    }
+
+    .db-shots .phone-frame:first-child {
+      transform: rotate(-4deg);
+      margin-top: 30px;
+    }
+
+    .db-shots .phone-frame:last-child {
+      transform: rotate(4deg);
+    }
+
+    /* ---------- ADMIN ---------- */
+    .admin {
+      background: var(--paper);
+    }
+
+    .admin-grid {
+      display: flex;
+      gap: 48px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .admin-copy {
+      flex: 1 1 380px;
+      min-width: 280px;
+    }
+
+    .admin-copy .feature-list {
+      margin-top: 26px;
+    }
+
+    .admin-visual {
+      flex: 1 1 420px;
+      min-width: 300px;
+    }
+
+    /* ---------- DUAL EXPERIENCE & ADMIN STYLES ---------- */
+    .dual-exp-section {
+      background: var(--paper);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 80px 0;
+    }
+
+    .dual-exp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-top: 40px;
+    }
+
+    .exp-card {
+      background: var(--cream);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .exp-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(33, 31, 20, 0.08);
+    }
+
+    .exp-card.admin-card {
+      background: #FFFDF6;
+      border: 2px solid var(--gold);
+      box-shadow: 0 16px 40px rgba(240, 180, 41, 0.15);
+    }
+
+    .exp-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      width: fit-content;
+    }
+
+    .exp-badge.app-badge {
+      background: var(--leaf-soft);
+      color: var(--leaf);
+    }
+
+    .exp-badge.admin-badge {
+      background: #FFF3D6;
+      color: #B37400;
+    }
+
+    .exp-card h3 {
+      font-size: 24px;
+      margin-bottom: 12px;
+      color: var(--ink);
+    }
+
+    .exp-card p {
+      color: var(--ink-soft);
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .exp-feature-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .exp-tag {
+      background: rgba(33, 31, 20, 0.05);
+      border: 1px solid var(--line);
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--ink);
+    }
+
+    /* Credential Box */
+    .credential-box {
+      background: #1E1E1E;
+      color: #D4D4D4;
+      border-radius: 16px;
+      padding: 18px;
+      margin-top: 16px;
+      font-family: monospace, sans-serif;
+      direction: ltr;
+      text-align: left;
+      font-size: 13px;
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .credential-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 6px;
+      color: #9CDCFE;
+      font-weight: bold;
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      direction: rtl;
+    }
+
+    .cred-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 6px 0;
+    }
+
+    .cred-val {
+      color: #CE9178;
+      font-weight: 600;
+    }
+
+    .btn-copy {
+      background: rgba(255, 255, 255, 0.12);
+      color: #FFF;
+      border: none;
+      border-radius: 6px;
+      padding: 3px 10px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+    }
+
+    .btn-copy:hover {
+      background: var(--gold);
+      color: var(--ink);
+    }
+
+    /* Browser Mockup Frame */
+    .browser-frame {
+      background: #FFFFFF;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: 0 25px 60px -15px rgba(33, 31, 20, 0.15);
+      overflow: hidden;
+      margin-top: 32px;
+      direction: ltr;
+      text-align: left;
+    }
+
+    .browser-header {
+      background: #F0EFEA;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .browser-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .browser-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .dot-red {
+      background: #FF5F56;
+    }
+
+    .dot-yellow {
+      background: #FFBD2E;
+    }
+
+    .dot-green {
+      background: #27C93F;
+    }
+
+    .browser-address {
+      background: #FFF;
+      border-radius: 6px;
+      padding: 4px 12px;
+      font-size: 12px;
+      color: #666;
+      flex: 1;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      font-family: monospace;
+    }
+
+    .browser-content {
+      padding: 24px;
+      background: #F9F9F7;
+    }
+
+    .dash-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .dash-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--ink);
+      font-family: 'Baloo 2', sans-serif;
+    }
+
+    .dash-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      background: #E1F0E2;
+      color: #2F8F46;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    .dash-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .dash-stat-card {
+      background: #FFF;
+      border: 1px solid var(--line);
+      padding: 14px;
+      border-radius: 12px;
+    }
+
+    .dash-stat-card small {
+      display: block;
+      color: var(--ink-soft);
+      font-size: 11px;
+      margin-bottom: 4px;
+    }
+
+    .dash-stat-card b {
+      font-size: 20px;
+      color: var(--ink);
+      font-family: 'Baloo 2', sans-serif;
+    }
+
+    .dash-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #FFF;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+      font-size: 13px;
+    }
+
+    .dash-table th {
+      background: #F0EFEA;
+      padding: 10px 14px;
+      text-align: left;
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .dash-table td {
+      padding: 10px 14px;
+      border-top: 1px solid var(--line);
+      color: var(--ink-soft);
+    }
+
+    .grade-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 11px;
+      color: #FFF;
+    }
+
+    .grade-a {
+      background: #2F8F46;
+    }
+
+    .grade-b {
+      background: #85B837;
+    }
+
+    .grade-c {
+      background: #F0B429;
+    }
+
+    .grade-d {
+      background: #E8802E;
+    }
+
+    .grade-e {
+      background: #E14B3B;
+    }
+
+    /* Comparison Grid */
+    .comp-table-wrap {
+      margin-top: 48px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 32px;
+    }
+
+    .comp-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      text-align: right;
+    }
+
+    .comp-table th,
+    .comp-table td {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+      font-size: 15px;
+    }
+
+    .comp-table th {
+      background: var(--cream);
+      color: var(--ink);
+      font-size: 16px;
+    }
+
+    .comp-check {
+      color: var(--leaf);
+      font-weight: bold;
+    }
+
+    .comp-cross {
+      color: #CCC;
+    }
+
+    @media (max-width:760px) {
+      .dual-exp-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .dash-stats-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* ---------- MARKET ---------- */
+    .market {
+      max-width: 780px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .market .eyebrow {
+      margin-bottom: 18px;
+    }
+
+    .market h2 {
+      font-size: 34px;
+      margin-bottom: 18px;
+    }
+
+    .market p {
+      color: var(--ink-soft);
+      font-size: 17px;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: center;
+      gap: 56px;
+      margin-top: 48px;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat b {
+      font-family: 'Lalezar', sans-serif;
+      font-size: 40px;
+      color: var(--leaf);
+      display: block;
+    }
+
+    .stat span {
+      color: var(--ink-soft);
+      font-size: 14px;
+    }
+
+    /* ---------- CTA ---------- */
+    .cta {
+      background: linear-gradient(135deg, var(--gold) 0%, var(--amber) 100%);
+      border-radius: 32px;
+      margin: 0 24px;
+      padding: 70px 40px;
+      text-align: center;
+      max-width: 1112px;
+      margin: 0 auto;
+    }
+
+    .cta h2 {
+      font-size: 40px;
+      color: var(--ink);
+      margin-bottom: 14px;
+    }
+
+    .cta p {
+      color: rgba(33, 31, 20, 0.75);
+      font-size: 16px;
+      margin-bottom: 34px;
+    }
+
+    .cta .btn-primary {
+      background: var(--ink);
+      color: var(--paper);
+      font-size: 18px;
+      padding: 18px 40px;
+    }
+
+    .cta .btn-primary:hover {
+      background: #000;
+    }
+
+    .cta-note {
+      margin-top: 18px;
+      font-size: 13px;
+      color: rgba(33, 31, 20, 0.65);
+    }
+
+    /* ---------- FOOTER ---------- */
+    footer {
+      padding: 56px 0 40px;
+      border-top: 1px solid var(--line);
+    }
+
+    .footer-grid {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-tag {
+      color: var(--ink-soft);
+      font-size: 14px;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(22px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-text {
+      animation: fadeUp .8s ease both;
+    }
+
+    .hero-visual {
+      animation: fadeUp .9s .15s ease both;
+    }
+
+    @media (max-width:760px) {
+      .hero {
+        padding: 40px 0 20px;
+      }
+
+      .hero-grid {
+        flex-direction: column;
+      }
+
+      .hero-text {
+        order: 2;
+        text-align: center;
+      }
+
+      .hero-visual {
+        order: 1;
+        margin-bottom: 20px;
+      }
+
+      .hero h1 {
+        font-size: 38px;
+      }
+
+      .hero-sub {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .btn-row {
+        justify-content: center;
+      }
+
+      .trust-strip {
+        justify-content: center;
+      }
+
+      .step,
+      .step:nth-child(even) {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .db-shots {
+        gap: 12px;
+      }
+
+      .db-shots .phone-frame {
+        width: 150px;
+      }
+
+      .admin-grid {
+        flex-direction: column;
+      }
+
+      .section-head {
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .stat-row {
+        gap: 32px;
+      }
+
+      .cta {
+        margin: 0 12px;
+        padding: 50px 24px;
+      }
+
+      .cta h2 {
+        font-size: 28px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      .badge {
+        white-space: nowrap;
+        line-height: 1;
+        animation: none;
+      }
+
+      .hero-text,
+      .hero-visual {
+        animation: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <div class="brand"><b>B</b><i>saht</i><em>ek</em></div>
+      <div style="display:flex; gap:12px; align-items:center;">
+        <a href="#admin"
+          style="color:var(--ink); font-weight:600; font-size:14px; text-decoration:none; padding:6px 14px; border-radius:50px; background:rgba(33,31,20,0.06);">🛠
+          لوحة التحكم</a>
+        <a href="#install" class="nav-cta">📱 ثبّت التطبيق</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-text">
+        <span class="eyebrow">تطبيق جزائري 100٪ للوعي الغذائي</span>
+        <h1>واش راك تاكل، <span>بالضبط؟</span></h1>
+        <p class="hero-sub">Bsahtek يفحص أي منتج غذائي بمجرد مسح الباركود، ويمنحك في ثوانٍ تقييماً واضحاً لجودته
+          الغذائية — سكر، دهون، ملح، وسعرات — بدل التخمين أو الثقة العمياء في العلبة.</p>
+        <div class="btn-row">
+          <a href="#how" class="btn btn-primary">شاهد كيف يعمل</a>
+          <a href="#install" class="btn btn-ghost">جرّب التطبيق الآن</a>
+        </div>
+        <div class="trust-strip">
+          <div class="trust-item"><span class="dot"></span>+64 منتج مُقيَّم</div>
+          <div class="trust-item"><span class="dot"></span>تقييم فوري خلال ثوانٍ</div>
+          <div class="trust-item"><span class="dot"></span>قاعدة بيانات جزائرية</div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="phone-frame">
+          <img src="photo1.jpg" alt="واجهة تطبيق Bsahtek الرئيسية">
+        </div>
+        <div class="badge badge-a">★★★★★</div>
+        <div class="badge badge-c">★★★</div>
+        <div class="badge badge-e">★</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ PROBLEM ============ -->
+  <section class="problem">
+    <div class="wrap">
+      <span class="eyebrow">المشكلة</span>
+      <h2>نشتري ونأكل، لكن لا أحد يشرح لنا ماذا يوجد في العلبة</h2>
+      <p>ملصقات غذائية بلغات لا يفهمها الجميع، أرقام بلا معنى واضح، وثقة عمياء في العلامة التجارية بدل الحقيقة. في غياب
+        أداة بسيطة تترجم هذه المعلومات إلى قرار واضح، يبقى المستهلك الجزائري وحيداً أمام الرف.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOW IT WORKS ============ -->
+  <section id="how">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">كيف يعمل</span>
+        <h2>من الباركود إلى القرار، في أقل من 5 ثوانٍ</h2>
+        <p>ثلاث خطوات فقط تفصل المستهلك عن معرفة حقيقية بما يستهلكه.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">١</div>
+          <div class="step-body">
+            <h3>وجّه الكاميرا نحو الباركود</h3>
+            <p>مسح فوري لأي منتج غذائي، مباشرة من السوق أو من البيت، بدون بحث يدوي.</p>
+          </div>
+          <div class="step-visual">
+            <div class="phone-frame"><img src="photo1.jpg" alt="مسح الباركود داخل التطبيق"></div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">٢</div>
+          <div class="step-body">
+            <h3>احصل على تقييم واضح فوراً</h3>
+            <p>درجة من A إلى E، ونتيجة جودة من 100، مبنيّة على السكر والدهون المشبعة والملح والبروتين — بلغة يفهمها
+              الجميع.</p>
+          </div>
+          <div class="step-visual">
+            <div class="phone-frame"><img src="photo3.jpg" alt="نتيجة تقييم المنتج"></div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">٣</div>
+          <div class="step-body">
+            <h3>قرّر بثقة</h3>
+            <p>اشترِ، تجنّب، أو استهلك باعتدال — القرار بيدك، لكن هذه المرة مبني على معلومة حقيقية لا على تخمين.</p>
+          </div>
+          <div class="step-visual">
+            <div class="phone-frame"><img src="photo_4.jpg" alt="إضافة منتج جديد وتقييمه فوراً"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ VIDEO 1 : APP DEMO ============ -->
+  <section style="padding-top:0;">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">شاهد بنفسك</span>
+        <h2>تجربة المستخدم داخل التطبيق</h2>
+        <p>جولة كاملة: من فتح الكاميرا إلى قراءة التقييم النهائي.</p>
+      </div>
+      <!--
+      ملاحظة لعبدو: عوّض هذا الـ div بعلامة <video controls poster="..."><source src="app-demo.mp4"></video>
+      أو بـ iframe يوتيوب/فيميو. الصورة الحالية هي فقط عنصر نائب (placeholder).
+    -->
+      <div style="position:relative; border-radius:24px; overflow:hidden; box-shadow:var(--shadow); background:#000;">
+        <video controls preload="metadata"
+          style="width:100%; max-height:680px; display:block; border-radius:24px; background:#000;">
+          <source src="vido app use.mp4" type="video/mp4">
+          متصفحك لا يدعم تشغيل الفيديو.
+        </video>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DATABASE / COMMUNITY ============ -->
+  <section>
+    <div class="wrap db-grid">
+      <div class="db-copy">
+        <span class="eyebrow">قاعدة البيانات</span>
+        <h2 style="font-size:34px; margin-bottom:16px;">تنمو مع كل مستخدم، لا مع فريق فقط</h2>
+        <p style="color:var(--ink-soft); font-size:16px;">أكثر من 63 منتج مُقيَّم حتى الآن، عبر بحث متقدم بالاسم أو
+          الماركة أو الباركود. وحين لا يجد المستخدم منتجاً، بإمكانه إضافته في دقيقة — فيحصل فوراً على تقييمه، ويستفيد
+          منه كل مستخدم آخر بعده.</p>
+        <ul class="feature-list">
+          <li><span class="ico">＋</span>
+            <div><b>إضافة مجتمعية للمنتجات</b><span>كل مسح غير موجود هو فرصة نمو لقاعدة البيانات، لا طريق مسدود.</span>
+            </div>
+          </li>
+          <li><span class="ico">⚑</span>
+            <div><b>تصنيف وفلترة متقدمة</b><span>خالٍ من الغلوتين، عضوي، أو الأفضل صحياً فقط — حسب حاجة كل
+                مستخدم.</span></div>
+          </li>
+          <li><span class="ico">✓</span>
+            <div><b>مراجعة قبل النشر</b><span>كل إضافة تمر عبر لوحة تحكم إدارية قبل اعتمادها رسمياً.</span></div>
+          </li>
+        </ul>
+      </div>
+      <div class="db-shots">
+        <div class="phone-frame"><img src="photo2.jpg" alt="نتائج البحث المتقدم في قاعدة بيانات المنتجات"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ADMIN / BUSINESS LAYER ============ -->
+  <section class="admin">
+    <div class="wrap admin-grid">
+      <div class="admin-copy">
+        <span class="eyebrow">خلف الكواليس</span>
+        <h2 style="font-size:34px; margin-bottom:16px;">منتج قابل للتوسّع، وليس مجرد تطبيق استهلاكي</h2>
+        <p style="color:var(--ink-soft); font-size:16px;">لوحة تحكم إدارية كاملة تدير المستخدمين والمنتجات والاشتراكات،
+          وتكشف رؤى حقيقية عن السوق الغذائي الجزائري: توزيع الدرجات، أكثر الفئات استهلاكاً، ونمو المستخدمين — أساس جاهز
+          لمسار تحقيق دخل واضح.</p>
+        <ul class="feature-list">
+          <li><span class="ico">◔</span>
+            <div><b>تحليلات لحظية</b><span>عدد المنتجات، توزيع الدرجات من A إلى E، والفئات الأكثر مسحاً.</span></div>
+          </li>
+          <li><span class="ico">☰</span>
+            <div><b>إدارة المستخدمين والمنتجات</b><span>مراجعة، تعديل، وموافقة على الإضافات المجتمعية من مكان
+                واحد.</span></div>
+          </li>
+          <li><span class="ico">$</span>
+            <div><b>بنية اشتراكات جاهزة</b><span>خطط Free و Premium مُجهّزة مسبقاً لتفعيل التسييل عند الحاجة.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="admin-visual">
+        <!--
+        ملاحظة لعبدو: عوّض هذا الـ div بفيديو حقيقي للوحة التحكم (screen recording).
+        الصورة الحالية مأخوذة من التطبيق الفعلي لكن ضبابية عمداً كعنصر نائب.
+      -->
+        <div style="position:relative; border-radius:24px; overflow:hidden; box-shadow:var(--shadow); background:#000;">
+          <video controls preload="metadata"
+            style="width:100%; max-height:680px; display:block; border-radius:24px; background:#000;">
+            <source src="vido admin use.mp4" type="video/mp4">
+            متصفحك لا يدعم تشغيل الفيديو.
+          </video>
+        </div>
+      </div>
+  </section>
+
+  <!-- ============ DUAL EXPERIENCE & ADMIN DASHBOARD SHOWCASE ============ -->
+  <section class="dual-exp-section" id="admin">
+    <div class="wrap">
+      <div class="section-head text-center" style="text-align:center; max-width:760px; margin:0 auto 40px;">
+        <span class="eyebrow">منظومة صحتك المتكاملة</span>
+        <h2 style="font-size:38px; margin-top:8px;">تجربتان متميزتان: تطبيق الهاتف ولائحة التحكم الإدارية</h2>
+        <p style="color:var(--ink-soft); font-size:17px; margin-top:12px;">
+          يتكون مشروع Bsahtek من تطبيق هاتف ذكي مخصص للمستهلكين، ولوحة تحكم ويب إدارية متكاملة تمنح فريق الإدارة
+          والمسؤولين تحكماً مطلقاً في المنتجات وقواعد البيانات والمستخدمين.
+        </p>
+      </div>
+
+      <!-- Dual Cards: App vs Admin -->
+      <div class="dual-exp-grid">
+        <!-- App Card -->
+        <div class="exp-card">
+          <div>
+            <span class="exp-badge app-badge">📱 للمستهلكين والمستخدمين</span>
+            <h3>تطبيق Bsahtek للهاتف الذكي</h3>
+            <p>تطبيق أندرويد سريع وسهل الاستخدام يتيح للمستخدمين مسح الباركود، والبحث عن المنتجات الغذائية، والحصول على
+              تقييمات صحية فورية ومفصلة.</p>
+            <div class="exp-feature-tags">
+              <span class="exp-tag">✔ مسح الباركود السريع</span>
+              <span class="exp-tag">✔ تقييم غذائي 100/A-E</span>
+              <span class="exp-tag">✔ قائمة المفضلة</span>
+              <span class="exp-tag">✔ إضافة منتجات مجتمعية</span>
+            </div>
+          </div>
+          <div>
+            <a href="https://github.com/Kessari/food-app/releases/latest/download/bsahtek.apk" target="_blank"
+              class="btn btn-ghost" style="width:100%; text-align:center; justify-content:center;">
+              📱 تحميل تطبيق أندرويد (APK)
+            </a>
+            <!-- App Credentials -->
+            <div class="credential-box">
+              <div class="credential-header">
+                <span>👤 حساب التجربة للمستخدم (User Demo)</span>
+              </div>
+              <div class="cred-row">
+                <span>البريد الإلكتروني: <span class="cred-val">user1@gmail.com</span></span>
+                <button class="btn-copy" onclick="copyCredential('user1@gmail.com', 'البريد الإلكتروني')">نسخ</button>
+              </div>
+              <div class="cred-row">
+                <span>كلمة المرور: <span class="cred-val">user123</span></span>
+                <button class="btn-copy" onclick="copyCredential('user123', 'كلمة المرور')">نسخ</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin Card -->
+        <div class="exp-card admin-card">
+          <div>
+            <span class="exp-badge admin-badge">🛠 للمدراء والمسؤولين</span>
+            <h3>لوحة تحكم إدارية متكاملة (Powerful Admin Dashboard)</h3>
+            <p>منصة ويب سحابية متقدمة تُمكن الأدمن من إدارة قاعدة البيانات كاملة، إضافة وتعديل المنتجات، متابعة
+              الإحصائيات الفورية، وإدارة المستخدمين والباركود بكفاءة وأمان.</p>
+            <div class="exp-feature-tags">
+              <span class="exp-tag">⚡ إدارة المنتجات والباركود</span>
+              <span class="exp-tag">👥 إدارة الحسابات والمستخدمين</span>
+              <span class="exp-tag">📊 إحصائيات وتقارير متقدمة</span>
+              <span class="exp-tag">🔄 مزامنة فورية ومراقبة</span>
+            </div>
+          </div>
+          <div>
+            <a href="https://polished-rice-45d0.abdoures08.workers.dev/" target="_blank" class="btn btn-primary"
+              style="width:100%; text-align:center; justify-content:center; background:var(--gold); color:var(--ink);">
+              🔐 فتح لوحة التحكم الإدارية (Admin Dashboard)
+            </a>
+            <!-- Admin Credentials -->
+            <div class="credential-box" style="border-color: rgba(240, 180, 41, 0.4);">
+              <div class="credential-header" style="color:var(--gold);">
+                <span>🔑 بيانات الدخول الخاصة بالأدمن (Admin Demo Login)</span>
+              </div>
+              <div class="cred-row">
+                <span>البريد الإلكتروني: <span class="cred-val">admin@gmail.com</span></span>
+                <button class="btn-copy"
+                  onclick="copyCredential('admin@gmail.com', 'البريد الإلكتروني للأدمن')">نسخ</button>
+              </div>
+              <div class="cred-row">
+                <span>كلمة المرور: <span class="cred-val">admin123</span></span>
+                <button class="btn-copy" onclick="copyCredential('admin123', 'كلمة المرور للأدمن')">نسخ</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <!-- Feature Comparison Table Grid -->
+      <div class="comp-table-wrap">
+        <div class="text-center" style="text-align:center; margin-bottom:20px;">
+          <span class="eyebrow">مقارنة الخصائص</span>
+          <h2 style="font-size:28px;">مقارنة بين التطبيق الهاتفي ولائحة التحكم الإدارية</h2>
+        </div>
+
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th>الوظيفة / الميزة</th>
+              <th style="text-align:center;">📱 التطبيق الهاتفي (Mobile App)</th>
+              <th style="text-align:center;">🛠 لوحة التحكم الإدارية (Admin Panel)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>الجمهور المستهدف</b></td>
+              <td style="text-align:center;">المستهلكون والمستخدمون العاديون</td>
+              <td style="text-align:center;">مديرو ومسؤولو النظام (Admins)</td>
+            </tr>
+            <tr>
+              <td><b>مسح الباركود بالكاميرا</b></td>
+              <td style="text-align:center;" class="comp-check">✔ متاح وفوري</td>
+              <td style="text-align:center;" class="comp-check">✔ إدخال وإدارة الباركود</td>
+            </tr>
+            <tr>
+              <td><b>البحث عن المنتجات</b></td>
+              <td style="text-align:center;" class="comp-check">✔ بحث متقدم بالاسم والماركة</td>
+              <td style="text-align:center;" class="comp-check">✔ استعلامات وتصفيات شاملة</td>
+            </tr>
+            <tr>
+              <td><b>إضافة وتعديل وحذف المنتجات</b></td>
+              <td style="text-align:center;" class="comp-cross">✖ اقتراح إضافة فقط</td>
+              <td style="text-align:center;" class="comp-check">✔ تحكم كامل (إضافة / تعديل / حذف)</td>
+            </tr>
+            <tr>
+              <td><b>إدارة حسابات المستخدمين والصلاحيات</b></td>
+              <td style="text-align:center;" class="comp-cross">✖ غير متاح</td>
+              <td style="text-align:center;" class="comp-check">✔ إدارة شاملة للمستخدمين والصلاحيات</td>
+            </tr>
+            <tr>
+              <td><b>عرض الإحصائيات والتحليلات الفورية</b></td>
+              <td style="text-align:center;" class="comp-cross">✖ غير متاح</td>
+              <td style="text-align:center;" class="comp-check">✔ تقارير وإحصائيات متقدمة</td>
+            </tr>
+            <tr>
+              <td><b>المزامنة الفورية وقواعد البيانات</b></td>
+              <td style="text-align:center;" class="comp-check">✔ استقبال التحديثات تلقائياً</td>
+              <td style="text-align:center;" class="comp-check">✔ تحكم ومراقبة المزامنة الفورية</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ MARKET ============ -->
+  <section class="market-section">
+    <div class="wrap market">
+      <span class="eyebrow">لماذا الآن</span>
+      <h2>وعي غذائي متصاعد، وسوق بلا حل جزائري</h2>
+      <p>الجزائريون يبحثون اليوم أكثر من أي وقت مضى عمّا يستهلكونه — من القلق حول جودة المنتجات إلى ارتفاع الاهتمام
+        بالصحة. Bsahtek يبني الجسر بين هذا القلق وبين معلومة موثوقة، بلغة السوق المحلي، وبقاعدة بيانات جزائرية لا تعتمد
+        على مصادر أجنبية.</p>
+      <div class="stat-row">
+        <div class="stat"><b>64+</b><span>منتج في القاعدة</span></div>
+        <div class="stat"><b>★★★★★—★</b><span>نظام تقييم مبسّط</span></div>
+        <div class="stat"><b>3</b><span>لغتا واجهة: عربي / إنجليزي / فرنسية</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <section id="install">
+    <div class="wrap">
+      <div class="cta">
+        <h2>جرّب Bsahtek بنفسك</h2>
+        <p>نسخة تجريبية مباشرة للمستثمرين — تحميل مباشر عبر GitHub Releases، بدون متجر تطبيقات.</p>
+        <a href="https://github.com/Kessari/food-app/releases/latest/download/bsahtek.apk" target="_blank"
+          class="btn btn-primary">📱 حمّل التطبيق الآن (APK)</a>
+        <div class="cta-note">Android · APK مباشر · الإصدار التجريبي v1.0.0</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap footer-grid">
+      <div class="brand"><b>B</b><i>saht</i><em>ek</em></div>
+      <div class="footer-tag">Bsahtek © 2026 — صنع في الجزائر 🇩🇿</div>
+    </div>
+  </footer>
+
+
+  <script>
+    function copyCredential(text, label) {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(function () {
+          alert('تم نسخ ' + label + ': ' + text);
+        });
+      } else {
+        var dummy = document.createElement("textarea");
+        document.body.appendChild(dummy);
+        dummy.value = text;
+        dummy.select();
+        document.execCommand("copy");
+        document.body.removeChild(dummy);
+        alert('تم نسخ ' + label + ': ' + text);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const apkUrl = 'https://github.com/Kessari/food-app/releases/latest/download/bsahtek.apk';
+
+      // Target all download, install, and try app buttons
+      const downloadSelectors = [
+        'a[href*="bsahtek.apk"]',
+        'a[href="#install"]',
+        '.nav-cta',
+        'a.btn-ghost[href="#install"]'
+      ];
+
+      const buttons = document.querySelectorAll(downloadSelectors.join(','));
+
+      buttons.forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+
+          // 1. Trigger background download
+          const iframe = document.createElement('iframe');
+          iframe.style.display = 'none';
+          iframe.src = apkUrl;
+          document.body.appendChild(iframe);
+          setTimeout(function () {
+            if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
+          }, 10000);
+
+          // 2. Smoothly scroll to the showcase interface (#admin)
+          const adminSection = document.getElementById('admin');
+          if (adminSection) {
+            adminSection.scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+      });
+    });
+  </script>
+
+
+</body>
+
+</html>
